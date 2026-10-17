@@ -1,0 +1,204 @@
+<% layout("/layouts/boilerplate")%>
+
+<div class="updatepage">
+  <div class="h1div">
+    <h1>Update listed residence &rarr;</h1>
+  </div>
+  <form
+    action="/listings/edit/<%= data._id %>?_method=PUT"
+    method="post"
+    enctype="multipart/form-data"
+    style="width: 80%"
+    class="needs-validation row"
+    novalidate
+  >
+    <div>
+      <label class="form-label" for="title">Title : </label>
+      <input
+        class="form-control"
+        type="text"
+        name="title"
+        value="<%= data.title%>"
+        required
+      />
+      <div class="invalid-feedback">title should be valid</div>
+    </div>
+    <div>
+      <label class="form-label" for="description"
+        >Describe your residence :
+      </label>
+      <input
+        class="form-control"
+        type="text"
+        name="description"
+        value="<%= data.description%>"
+        required
+      />
+      <div class="invalid-feedback">description should be valid</div>
+    </div>
+    <div>
+      <label class="form-label" for="price">Rent &#8377; : </label>
+      <input
+        class="form-control"
+        type="number"
+        name="price"
+        value="<%= data.price%>"
+        required
+      />
+      <div class="invalid-feedback">price should be valid</div>
+    </div>
+    <div>
+      <label class="form-label" for="location">Address : </label>
+      <input
+        class="form-control"
+        type="text"
+        name="location"
+        value="<%= data.location%>"
+        required
+      />
+      <div class="invalid-feedback">location should be valid</div>
+    </div>
+    <div>
+      <label class="form-label" for="country">Country : </label>
+      <input
+        class="form-control"
+        type="text"
+        name="country"
+        value="<%= data.country%>"
+        required
+      />
+      <div class="invalid-feedback">country should be valid</div>
+    </div>
+    <div style="margin-bottom: 1rem">
+      <label for="category" class="form-label">Category</label>
+      <select
+        class="form-select"
+        name="category"
+        id="category"
+        aria-label="Default select example"
+        required
+      >
+        <option disabled selected>Select a category</option>
+        <option value="rooms">Rooms</option>
+        <option value="cabins">Cabins</option>
+        <option value="mountains">Mountains</option>
+        <option value="pools">Pools</option>
+        <option value="camping">Camping</option>
+        <option value="castles">Castles</option>
+        <option value="arctic">Arctic</option>
+        <option value="domes">Domes</option>
+        <option value="boats">Boats</option>
+        <option value="farms">Farms</option>
+      </select>
+    </div>
+    <div id="imagewrapper"></div>
+
+    <button class="image btn btn-primary" type="button">Add more images</button>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+<script>
+
+    const wrapper = document.getElementById("imagewrapper");
+    const button = document.querySelector(".image");
+    const images = <%- JSON.stringify(data.image) %>;
+    const data = <%- JSON.stringify(data) %>;
+    const MAX = 5;
+    let count = images.length;
+
+    wrapper.style.marginBottom = "16px";
+
+    // EXISTING IMAGES
+    for (let i = 0; i < images.length; i++) {
+      const input = document.createElement("input");
+      const label = document.createElement("label");
+      const dbtn = document.createElement("button");
+      const imageDiv = document.createElement("img");
+
+      label.htmlFor = "image";
+      label.innerText = `Image : ${i + 1}`;
+      label.classList.add("form-label");
+      label.style.width = "100%";
+
+      input.type = "text";
+      input.name = "image";
+      input.value = images[i];
+
+      imageDiv.src = images[i];
+      imageDiv.style.height = "150px";
+      imageDiv.style.borderRadius = "10px";
+      imageDiv.style.overflow = "hidden";
+      imageDiv.style.objectFit = "contain";
+      imageDiv.style.display = "block";
+
+      dbtn.type = "button";
+      dbtn.className = "dbtn";
+      dbtn.innerText = "Delete row";
+
+      dbtn.addEventListener("click", () => {
+        count--;
+        label.remove();
+        input.remove();
+        imageDiv.remove();
+        dbtn.remove();
+      });
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(input);
+      wrapper.appendChild(imageDiv);
+      wrapper.appendChild(dbtn);
+    }
+
+    // NEW IMAGES (file inputs)
+    button.addEventListener("click", () => {
+      if (count >= MAX) return alert(`Maximum ${MAX} images`);
+
+      const input = document.createElement("input");
+      const label = document.createElement("label");
+      const dbtn = document.createElement("button");
+      const invalud = document.createElement("div");
+
+      count++;
+      label.htmlFor = "image";
+      label.innerText = `Image : ${count}`;
+      label.classList.add("form-label");
+      label.style.width = "100%";
+
+      input.type = "file";
+      input.name = "image";
+
+      input.classList.add("form-control");
+      input.style.width = "100%";
+      input.required = true;
+
+      dbtn.type = "button";
+      dbtn.className = "dbtn";
+      dbtn.innerText = "Delete row";
+
+      invalud.classList.add("invalid-feedback");
+      invalud.innerText = "Please choose an image";
+
+      dbtn.addEventListener("click", () => {
+        count--;
+        label.remove();
+        input.remove();
+        invalud.remove();
+        dbtn.remove();
+      });
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(input);
+      wrapper.appendChild(invalud);
+      wrapper.appendChild(dbtn);
+    });
+
+  const options = document.querySelectorAll("option")
+
+  console.log(data)
+  options.forEach(el=>{
+    if(el.value == data.category){
+      el.setAttribute("selected",true)
+    }
+  })
+</script>

@@ -1,0 +1,172 @@
+<% layout("/layouts/boilerplate")%>
+
+<div class="updatepage">
+  <div class="h1div">
+    <h1>List your residence &rarr;</h1>
+  </div>
+  <form
+    style="width: 80%"
+    novalidate
+    class="container-sm needs-validation"
+    action="http://localhost:8080/listings/new"
+    enctype="multipart/form-data"
+    method="post"
+  >
+    <div style="margin-bottom: 16px">
+      <label class="form-label" for="title"> Title : </label>
+      <input
+        type="text"
+        name="title"
+        placeholder="Your property type (apartment, cabin, villa, etc.)?"
+        class="form-control"
+        required
+      />
+      <div class="invalid-feedback">Title should be valid</div>
+    </div>
+    <div style="margin-bottom: 16px">
+      <label class="form-label" for="description"
+        >Describe your property :
+      </label>
+      <input
+        type="text"
+        name="description"
+        placeholder="Write about the property ..."
+        class="form-control"
+        required
+      />
+      <div class="invalid-feedback">description should be valid</div>
+    </div>
+    <div style="margin-bottom: 16px">
+      <label class="form-label" for="price"> Rent : </label>
+      <input
+        type="number"
+        name="price"
+        placeholder="Enter &#8377; price of residence"
+        class="form-control"
+        required
+      />
+      <div class="invalid-feedback">price should be valid</div>
+    </div>
+    <div style="margin-bottom: 16px">
+      <label class="form-label" for="location">Address :</label>
+      <input
+        type="text"
+        name="location"
+        placeholder="Where is this residence located at ?"
+        class="form-control"
+        required
+      />
+      <div class="invalid-feedback">location should be valid</div>
+    </div>
+    <div style="margin-bottom: 16px">
+      <label class="form-label" for="country">Country </label>
+      <input
+        type="text"
+        name="country"
+        placeholder="Which country is this residence located (India,America...) "
+        class="form-control"
+        required
+      />
+      <div class="invalid-feedback">country should be valid</div>
+    </div>
+    <div style="margin-bottom: 1rem">
+      <label for="category">Category</label>
+      <select
+        class="form-select"
+        name="category"
+        id="category"
+        aria-label="Default select example"
+        required
+      >
+        <option disabled selected>Select a category</option>
+        <option value="rooms">Rooms</option>
+        <option value="cabins">Cabins</option>
+        <option value="mountains">Mountains</option>
+        <option value="pools">Pools</option>
+        <option value="camping">Camping</option>
+        <option value="castles">Castles</option>
+        <option value="arctic">Arctic</option>
+        <option value="domes">Domes</option>
+        <option value="boats">Boats</option>
+        <option value="farms">Farms</option>
+      </select>
+    </div>
+    <!-- <div style="margin-bottom: 16px">
+        <label class="form-label" for="image"> Image Link </label>
+        <div id="imagewrapper">
+          <input
+            type="text"
+            name="image"
+            placeholder="Picture link of residence"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">image url should be valid</div>
+        </div>
+      </div> -->
+    <div style="margin-bottom: 16px">
+      <label class="form-label" for="image"> Upload Image </label>
+      <div id="imagewrapper">
+        <input
+          type="file"
+          name="image"
+          placeholder="Upload a picture of residence"
+          class="form-control"
+          required
+        />
+
+        <div class="invalid-feedback">image url should be valid</div>
+      </div>
+    </div>
+    <button class="image btn btn-primary" type="button">Add more images</button>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+<script>
+  const imagebtn = document.querySelector(".image");
+  const wrapper = document.getElementById("imagewrapper");
+  let count = 1;
+  const MAX = 5;
+  imagebtn.addEventListener("click", () => {
+    if (count >= MAX) return alert(`Maximum ${MAX} images`);
+
+    let i = 1;
+    const input = document.createElement("input");
+    const label = document.createElement("label");
+    const dbtn = document.createElement("button");
+    const invalud = document.createElement("div");
+    label.for = "image";
+    label.classList.add("form-label");
+    label.innerText = `Image ${count + 1} :`;
+    count++;
+    input.type = "file";
+    input.name = "image";
+    input.classList.add("form-control");
+    input.required = true;
+    input.placeholder = "Another image ";
+    dbtn.type = "button";
+    dbtn.id = "dbtn";
+    dbtn.innerText = "Delete row";
+    invalud.classList.add("invalid-feedback");
+    invalud.innerText = "image url should be valid";
+
+    dbtn.addEventListener("click", () => {
+      count--;
+      label.remove();
+      input.remove();
+      dbtn.remove();
+      invalud.remove();
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    wrapper.appendChild(invalud);
+    wrapper.appendChild(dbtn);
+  });
+  document.querySelector("form").addEventListener("submit", () => {
+    document.querySelectorAll("input[name='image']").forEach((inp) => {
+      if (inp.value.trim() == "") inp.disabled = true;
+    });
+  });
+</script>

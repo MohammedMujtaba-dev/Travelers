@@ -1,0 +1,368 @@
+<% layout("layouts/boilerplate") %>
+
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+  const listing = <%- JSON.stringify(data) %>;
+</script>
+
+<div class="container">
+  <div class="main row-cols-1 row">
+    <div class="col">
+      <div>
+        <h2
+          class="listingtitle"
+        >
+          <%= data.title %> :-
+        </h2>
+
+        <img id="imagecoursel" alt="" />
+      </div>
+
+      <div>
+        <% for (let i = 0; i < data.image.length; i++) { %>
+          <img
+            class="imagecourselsmall"
+            src="<%= data.image[i] %>"
+            alt=""
+          />
+        <% } %>
+      </div>
+    </div>
+
+    <div class="single-content-box col">
+      <!--
+      <p class="country" style="font-style: italic;">
+        Owned by: <%= data.owner.username %>
+      </p>
+      -->
+
+      <p class="title"><%= data.title %></p>
+
+      <p class="price">
+        &#8377; <%= data.price.toLocaleString("en-IN") %>
+      </p>
+
+      <p class="desc"><%= data.description %></p>
+
+      <p class="location">
+        <%= data.location %>, <%= data.country %>
+      </p>
+
+      <% if (currUser && currUser._id.equals(data.owner._id)) { %>
+        <a
+          href="/listings/edit/<%= data._id %>"
+          style="text-decoration: none"
+        >
+          <button
+            style="
+              color: whitesmoke;
+              font-family:
+                'Gill Sans',
+                'Gill Sans MT',
+                Calibri,
+                'Trebuchet MS',
+                sans-serif;
+              background-color: rgb(80, 171, 227);
+              padding: 5px 10px;
+              border-radius: 5px;
+            "
+          >
+            Edit this listing
+          </button>
+        </a>
+
+        <br />
+
+        <form
+          action="/listings/<%= data._id %>?_method=DELETE"
+          method="post"
+        >
+          <button
+            style="
+              color: whitesmoke;
+              font-family:
+                'Gill Sans',
+                'Gill Sans MT',
+                Calibri,
+                'Trebuchet MS',
+                sans-serif;
+              background-color: rgb(241, 156, 156);
+              padding: 5px 10px;
+              border-radius: 5px;
+            "
+          >
+            Delete this listing
+          </button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+
+  <% 
+    const related = Alllisting.filter(
+      (l) =>
+        l.category === data.category &&
+        String(l._id) !== String(data._id)
+    );
+  %>
+
+  <% if (related.length) { %>
+  <div>
+    <h1
+      style="
+        display: block;
+        text-align: center;
+        margin: 10px 0 30px;
+        font-family: Mouse Memoirs, sans-serif;
+      "
+    >
+      - Related Listings -
+    </h1>
+
+      <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1">
+        <% related.forEach((list) => { %>
+          <a
+            href="/listings/individual/<%= list._id %>"
+            style="text-decoration: none; color: black"
+          >
+            <div class="card col">
+              <img
+                src="<%= list.image[0] %>"
+                class="card-img-top"
+                alt="<%= list.title %>"
+              />
+
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= list.title %>
+                </h5>
+
+                <p class="card-text">
+                  &#8377; <%= list.price.toLocaleString("en-IN") %>
+                </p>
+              </div>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+     
+    </div>
+    <% } %>
+
+  <div style="margin: 2rem 0">
+    <h2 style="font-family: Mouse Memoirs, sans-serif">
+      Where you'll be
+    </h2>
+
+    <div id="map"></div>
+  </div>
+
+  <% if (currUser) { %>
+    <div
+      class="container"
+      style="margin-bottom: 16px; margin-top: 16px"
+    >
+      <h3
+        style="
+          margin: 2rem 0;
+          font-family: Mouse Memoirs, sans-serif;
+        "
+      >
+        Leave a review:
+      </h3>
+
+      <form
+        class="row g-3 needs-validation"
+        style="
+          border: 1px solid rgba(237, 201, 201, 0.664);
+          padding: 1rem;
+        "
+        action="/listings/<%= data._id %>/reviews"
+        method="post"
+        novalidate
+      >
+        <div class="col-sm-12">
+          <label for="comment" class="form-label">
+            Comment
+          </label>
+
+          <input
+            name="comment"
+            type="text"
+            id="comment"
+            placeholder="give your feedback"
+            class="form-control p-3"
+            required
+          />
+
+          <div class="invalid-feedback">
+            Please enter your feedback
+          </div>
+        </div>
+
+        <div class="col-2">
+          <label for="rating" class="form-label">
+            Rating:
+          </label>
+
+          <fieldset class="starability-slot">
+            <input
+              type="radio"
+              id="no-rate"
+              class="input-no-rate"
+              name="rating"
+              value="1"
+              checked
+              aria-label="No rating."
+            />
+
+            <input
+              type="radio"
+              id="first-rate1"
+              name="rating"
+              value="1"
+            />
+            <label for="first-rate1" title="Terrible">
+              1 star
+            </label>
+
+            <input
+              type="radio"
+              id="first-rate2"
+              name="rating"
+              value="2"
+            />
+            <label for="first-rate2" title="Not good">
+              2 stars
+            </label>
+
+            <input
+              type="radio"
+              id="first-rate3"
+              name="rating"
+              value="3"
+            />
+            <label for="first-rate3" title="Average">
+              3 stars
+            </label>
+
+            <input
+              type="radio"
+              id="first-rate4"
+              name="rating"
+              value="4"
+            />
+            <label for="first-rate4" title="Very good">
+              4 stars
+            </label>
+
+            <input
+              type="radio"
+              id="first-rate5"
+              name="rating"
+              value="5"
+            />
+            <label for="first-rate5" title="Amazing">
+              5 stars
+            </label>
+          </fieldset>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  <% } %>
+
+  <% if (data.reviews.length) { %>
+    <div >
+      <h3 style="text-align: center">
+        All reviews of <%= data.title %>:
+      </h3>
+
+      <div class="row my-5 row-cols-lg-4 row-cols-md-3 row-cols-1 ">
+        <% data.reviews.forEach((review) => { %>
+          <div class="col my-4 card">
+            <div class="card-header bg-primary text-white fw-bold">
+              <b>
+                @<%= review.reviewOwner
+                  ? review.reviewOwner.username
+                  : "Deleted user" %> :
+              </b>
+            </div>
+
+            <div class="card-body">
+              <p
+                class="starability-result card-text"
+                data-rating="<%= review.rating %>"
+              >
+                Rating: <%= review.rating %>
+              </p>
+
+              <p class="card-title fw-light">
+                <%= review.comment %>
+              </p>
+
+              <form
+                action="/listings/<%= data._id %>/reviews/<%= review._id %>?_method=DELETE"
+                method="POST"
+              >
+                <% if (
+                  currUser &&
+                  review.reviewOwner &&
+                  review.reviewOwner._id.equals(currUser._id)
+                ) { %>
+                  <button class="btn btn-outline-dark">
+                    Delete
+                  </button>
+                <% } %>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<script src="/js/map.js"></script>
+
+<script>
+  const imagecoursel = document.querySelector("#imagecoursel");
+  const images = <%- JSON.stringify(data.image) %>;
+  const imagecourselsmall = document.querySelectorAll(
+    ".imagecourselsmall"
+  );
+
+  let i = 0;
+
+  function updateImageCoursel() {
+    if (!images.length) return;
+
+    imagecoursel.src = images[i];
+
+    for (let t = 0; t < imagecourselsmall.length; t++) {
+      if (imagecourselsmall[t].src === imagecoursel.src) {
+        imagecourselsmall[t].classList.add(
+          "imagecourselsmallhover"
+        );
+      } else {
+        imagecourselsmall[t].classList.remove(
+          "imagecourselsmallhover"
+        );
+      }
+    }
+  }
+
+  updateImageCoursel();
+
+  if (images.length > 1) {
+    setInterval(() => {
+      i = (i + 1) % images.length;
+      updateImageCoursel();
+    }, 5000);
+  }
+</script>

@@ -1,0 +1,107 @@
+<% layout("/layouts/boilerplate")%>
+<nav class="navbar navbar-expand-lg filters " >
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarNavAltMarkupfilters"
+    aria-controls="navbarNavAltMarkupfilters"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+    id="navbarbtn"
+  >
+    <span><i class="fa-solid fa-sliders"></i> Filters</span>
+  </button>
+
+  <div class="collapse filternavbar navbar-collapse" id="navbarNavAltMarkupfilters" >
+<div class="filters-list">
+      <a href="/listings" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-fire"></i>
+        <p>Trending</p>
+      </a>
+      <a href="/listings/category/rooms" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-bed"></i>
+        <p>Rooms</p>
+      </a>
+      <a href="/listings/category/cabins" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-brands fa-houzz"></i>
+        <p>Cabins</p>
+      </a>
+      <a href="/listings/category/mountains" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-mountain-sun"></i>
+        <p>Mountains</p>
+      </a>
+      <a href="/listings/category/pools" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-person-swimming"></i>
+        <p>Pools</p>
+      </a>
+      <a href="/listings/category/camping" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-tents"></i>
+        <p>Camping</p>
+      </a>
+      <a href="/listings/category/castles" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-synagogue"></i>
+        <p>Castles</p>
+      </a>
+      <a href="/listings/category/farms" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-cow"></i>
+        <p>Farms</p>
+      </a>
+      <a href="/listings/category/arctic" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-snowflake"></i>
+        <p>Arctic</p>
+      </a>
+      <a href="/listings/category/domes" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-igloo"></i>
+        <p>Domes</p>
+      </a>
+      <a href="/listings/category/boats" style="text-decoration: none;color: black;" class="filter">
+        <i class="fa-solid fa-ship"></i>
+        <p>Boats</p>
+      </a>
+
+      <div class="form-check form-switch ms-lg-auto" >
+        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+        <label class="form-check-label" for="switchCheckDefault">Display total after tax</label>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-2  my-3">
+    <%data.forEach(d =>{%>
+      <a href="http://localhost:8080/listings/individual/<%= d._id %>" style="text-decoration: none;color: black;">
+        <div class="card col"> 
+          <img src="<%= d.image[0] %> " class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><%=d.title%></h5>
+            <p class="card-text">
+  &#8377; <span class="price card-text" data-price="<%= d.price %>"><%= d.price.toLocaleString("en-IN") %></span>
+
+  <span class="showgst d-none">-incl 18% GST</span>
+</p>
+          </div>
+        </div>
+      </a>
+    <%})%>
+</div>
+
+<script>
+const formcheck = document.querySelector(".form-check-input");
+const showgst = document.querySelectorAll(".showgst");
+const priceEls = document.querySelectorAll(".price");
+
+formcheck.addEventListener("change", () => {
+  const withTax = formcheck.checked;
+
+  priceEls.forEach(el => {
+    const price = Number(el.dataset.price);
+    const gst =  Math.round((price * 18) / 100) ;
+    const gstprice = gst + price;
+    const total = withTax ? gstprice : price;
+    el.textContent = total.toLocaleString("en-IN");
+   
+  });
+
+  showgst.forEach(el => el.classList.toggle("d-none"));
+});
+</script>
