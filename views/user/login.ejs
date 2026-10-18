@@ -7,7 +7,7 @@
     style="width: 80%"
     novalidate
     class="container-sm needs-validation"
-    action="http://localhost:8080/auth/login"
+    action="/auth/login"
     method="post"
   >
     <div style="margin-bottom: 16px" class="showname">
@@ -35,29 +35,7 @@
 
     <button type="submit">Login</button>
     <p style="text-align: center">
-      Don't have an account?<a href="http://localhost:8080/auth/signup">
-        create one
-      </a>
+      Don't have an account?<a href="/auth/signup"> create one </a>
     </p>
   </form>
 </div>
-<!-- <script>
-  const pe = document.querySelector(".loginwithemail");
-  const pn = document.querySelector(".loginwithusername");
-  const de = document.querySelector(".showemail");
-  de.classList.add("hide");
-  pe.addEventListener("click", function () {
-    const dn = document.querySelector(".showname");
-    dn.classList.add("hide");
-    dn.classList.remove("unhide");
-    de.classList.add("unhide");
-    de.classList.remove("hide");
-  });
-  pn.addEventListener("click", function () {
-    const dn = document.querySelector(".showname");
-    de.classList.remove("unhide");
-    de.classList.add("hide");
-    dn.classList.remove("hide");
-    dn.classList.add("unhide");
-  });
-</script> -->

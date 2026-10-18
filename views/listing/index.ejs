@@ -69,7 +69,7 @@
 </nav>
 <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-2  my-3">
     <%data.forEach(d =>{%>
-      <a href="http://localhost:8080/listings/individual/<%= d._id %>" style="text-decoration: none;color: black;">
+      <a href="/listings/individual/<%= d._id %>" style="text-decoration: none;color: black;">
         <div class="card col"> 
           <img src="<%= d.image[0] %> " class="card-img-top" alt="...">
           <div class="card-body">
