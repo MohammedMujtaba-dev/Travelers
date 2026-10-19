@@ -30,7 +30,7 @@ A full-stack stay-listing web app (Airbnb-style). Users can browse stays, filter
 
 ## Project Structure
 
-
+```
 ├── app.js                   
 ├── cloudConfig.js              Cloudinary + multer storage
 ├── db/listings.js              MongoDB connection
@@ -49,7 +49,7 @@ A full-stack stay-listing web app (Airbnb-style). Users can browse stays, filter
 │   ├── user/                   login, signup
 │   └── error.ejs
 └── public/                     css/, js/map.js, js/script.js
-
+```
 
 ## Getting Started
 
