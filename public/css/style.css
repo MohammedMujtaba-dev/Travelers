@@ -315,6 +315,7 @@ sub {
 }
 
 #navbarbtn {
+  font-size: 1.2rem;
   box-shadow: none;
 }
 
@@ -378,6 +379,16 @@ sub {
   }
   #map {
     height: 40vh;
+  }
+}
+@media (max-width: 767.98px) {
+  .updatepage > form {
+    border: none;
+  }
+}
+@media (max-width: 767.98px) {
+  #navbarbtn > span {
+    font-size: 1rem !important;
   }
 }
 
